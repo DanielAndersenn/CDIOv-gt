@@ -1,7 +1,6 @@
 package data;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayList;	
 
 public class OperatoerDTO implements IOperatoerDAO{
 	
