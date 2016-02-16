@@ -71,8 +71,35 @@ public class Graenseflade {
 	}
 
 	private void weigh() {
-		// TODO Auto-generated method stub
 		
+		String password;
+		int taraWeight;
+		int bruttoWeight;
+		int userChoice;
+		
+		System.out.println("To weigh something put in your password");
+		password = input.nextLine();
+		if(password.equals(loggedInUser.password))
+		{
+			System.out.println("Password correct. Put in the weight of tara in kg:");
+			taraWeight = input.nextInt();
+			input.nextLine();
+			System.out.println("Put in the gross weight in kg:");
+			bruttoWeight = input.nextInt();
+			input.nextLine();
+			System.out.println("Net weight: " + (taraWeight+bruttoWeight));
+			System.out.println("\n1. Weigh again");
+			System.out.println("2. Return to rootmenu");
+			userChoice = input.nextInt();
+			input.nextLine();
+			
+			if(userChoice == 1) state = State.WEIGH;
+			if(userChoice == 2) state = State.ROOT_MENU;
+		} else
+		{
+			System.out.println("Password incorrect. Returning to rootmenu!");
+			state = State.ROOT_MENU;
+		}
 	}
 
 	private void changePassword() {
