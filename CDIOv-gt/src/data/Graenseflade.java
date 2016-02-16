@@ -77,23 +77,29 @@ public class Graenseflade {
 
 	private void changePassword() {
 		
-//		String currPassword;
-//		String newPassword;
-//		
-//		System.out.println("To change your password, first input your current password: ");
-//		
-//		currPassword = input.nextLine();
-//		
-//		if(currPassword.equals(loggedInUser.password)) 
-//		{
-//			System.out.println("Current password matched, type in your new password:");
-//			newPassword = input.nextLine();
-//			operatoerInterface.updateOperatoer(opr);
-//		} else 
-//		{
-//			System.out.println("Existing password not matched. Returning to root menu!");
-//			state = State.ROOT_MENU;
-//		}
+		String currPassword;
+		String newPassword;
+		String newPassword2;
+		
+		System.out.println("To change your password, first input your current password: ");
+		
+		currPassword = input.nextLine();
+		
+		if(currPassword.equals(loggedInUser.password)) 
+		{
+			System.out.println("Current password matched, type in your new password:");
+			newPassword = input.nextLine();
+			System.out.println("Type the new password again to confirm the change:");
+			newPassword2 = input.nextLine();
+			loggedInUser.password = newPassword;
+			System.out.println("Password has been changed. Returning to rootmenu!");
+			System.out.println(loggedInUser + " | Med følgende password: " + loggedInUser.password);
+			state = State.ROOT_MENU;
+		} else 
+		{
+			System.out.println("Existing password not matched. Returning to root menu!");
+			state = State.ROOT_MENU;
+		}
 		
 	}
 
