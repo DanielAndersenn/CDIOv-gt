@@ -1,6 +1,7 @@
 package data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import data.Graenseflade.State;	
@@ -88,6 +89,58 @@ public class OperatoerDTO implements IOperatoerDAO{
 	
 	public String toString() {
 		return "Operatør ID: " + oprId + " | Navn: " + oprNavn + " | CPR-Nummer: " + cpr + " | Adminstrator: " + isAdmin;
+	}
+	
+	public boolean validPassword(OperatoerDTO opr){
+		boolean status = true;
+		int tq = 0;
+		
+		//Check if names is part of password
+		String[] splited = opr.oprNavn.split("\\s+");
+		if(opr.password.toLowerCase().contains(splited[0].toLowerCase())) status = false;
+		if(opr.password.toLowerCase().contains(splited[1].toLowerCase())) status = false;
+		
+		//Check password length
+		if(opr.password.length()<7) status = false;
+		
+		//Check for User ID
+		if(opr.password.contains(Integer.toString(opr.oprId))) status = false;
+		
+		//The 4 categories
+		boolean[] req = new boolean[4];
+		Arrays.fill(req, Boolean.FALSE);
+
+			//Check for small letter
+			for(int i = 0; i < opr.password.length() ; i++) {
+				char test = opr.password.charAt(i);
+				if(Character.isLowerCase(test))req[0] = true;
+			}
+			
+			//Check for capital letter
+			for(int i = 0; i < opr.password.length() ; i++) {
+				char test = opr.password.charAt(i);
+				if(Character.isUpperCase(test))req[1] = true;
+			}
+			
+			//Check for Number
+			for(int i = 0; i < opr.password.length() ; i++) {
+				char test = opr.password.charAt(i);
+				int number = Character.getNumericValue(test);
+				if(number >= 0 && number < 10)req[2] = true;
+			}
+			
+			//Check for Nonalphanumeric characters
+			String tegn[] = {".","-","_","+","!","?","="};
+			for(int i=0; i < tegn.length ; i++ ){
+				if(opr.password.contains(tegn[i]))req[3] = true;
+			}
+		
+		for(int i=0;i<4;i++){
+			if(req[i])tq++;
+		}
+		if(tq<3)status = false;
+		
+		return status;
 	}
 	
 }
