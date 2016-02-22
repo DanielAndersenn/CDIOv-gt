@@ -1,6 +1,9 @@
 package data;
 
-import java.util.ArrayList;	
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import data.Graenseflade.State;	
 
 public class OperatoerDTO implements IOperatoerDAO{
 	
@@ -53,14 +56,34 @@ public class OperatoerDTO implements IOperatoerDAO{
 
 	@Override
 	public void updateOperatoer(OperatoerDTO opr) throws DALException {
-		// TODO Auto-generated method stub
+		String newPassword;
+		String newPassword2;
+		Scanner input = new Scanner(System.in);
 		
+		System.out.println("Type in your new password:");
+		newPassword = input.nextLine();
+		// Validate password
+		System.out.println("Type the new password again to confirm the change:");
+		newPassword2 = input.nextLine();
+		if (newPassword.equals(newPassword2)){
+			opr.password = newPassword;			
+			System.out.println("Password has been changed. Returning to rootmenu!");
+			System.out.println(opr + " | Med følgende password: " + opr.password);
+			input.close();
+		} else {
+			System.out.println("Password is not identical. Try again.");
+			input.close();
+			updateOperatoer(opr);
+		}
 	}
 
 	@Override
 	public void deleteOperatoer(OperatoerDTO opr) throws DALException {
-		operatoerList.remove(opr);
-		
+		if (!operatoerList.remove(opr)) {
+			throw new DALException("Operator does not exist");
+		} else {
+			System.out.println("Deletion of user was successful.");
+		}
 	}
 	
 	public String toString() {

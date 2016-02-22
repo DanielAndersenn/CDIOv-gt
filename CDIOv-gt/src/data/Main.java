@@ -2,7 +2,7 @@ package data;
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws DALException {
 		IOperatoerDAO d = new OperatoerDTO();
 		OperatoerDTO operatoer0 = new OperatoerDTO("sysadmin", "000000-0000", "Abc02324", true);
 		OperatoerDTO operatoer1 = new OperatoerDTO("Daniel Andersen", "090492-3567", "hejven123", true);

@@ -1,4 +1,5 @@
 package data;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
@@ -9,14 +10,14 @@ public class Graenseflade {
 	Scanner input = new Scanner(System.in);	
 	
 	//States: 	
-	public enum State {LOG_IN, ROOT_MENU, CREATE_USER, CHANGE_PASSWORD , WEIGH, EXIT};
+	public enum State {LOG_IN, ROOT_MENU, CREATE_USER, CHANGE_PASSWORD , WEIGH, EXIT, DELETE_OPERATOR};
 	private State state = State.LOG_IN;
 	
 	public Graenseflade(IOperatoerDAO operatoerDTO) {
 		this.operatoerInterface = operatoerDTO;
 	}
 	
-	public void run() 
+	public void run() throws DALException 
 	{
 		while(true)
 		{
@@ -33,10 +34,29 @@ public class Graenseflade {
 			case WEIGH: weigh();
 			break;
 			case EXIT: exit();
+			break;
+			case DELETE_OPERATOR: deleteOperator();
 			}
 		}
 	}
 	
+	private void deleteOperator() throws DALException {
+		// TODO Auto-generated method stub
+		int oprId;
+		OperatoerDTO userToDelete;
+		ArrayList<OperatoerDTO> allOperators = operatoerInterface.getOperatoerList();
+		System.out.println("All operators in the system");
+		for(int i = 0; i < allOperators.size(); i++){
+			System.out.println(allOperators.get(i));
+		}
+		System.out.println("Choose ID of operator that you would like to delete:");
+		oprId = input.nextInt();
+		userToDelete = operatoerInterface.getOperatoer(oprId);
+		operatoerInterface.deleteOperatoer(userToDelete);
+		
+		state = State.ROOT_MENU;
+	}
+
 	private void logIn() {
 		
 		int operatoerID; 
@@ -66,7 +86,7 @@ public class Graenseflade {
 	}
 
 	private void exit() {
-		System.exit(0);
+		state = State.LOG_IN;
 		
 	}
 
@@ -105,8 +125,7 @@ public class Graenseflade {
 	private void changePassword() {
 		
 		String currPassword;
-		String newPassword;
-		String newPassword2;
+	
 		
 		System.out.println("To change your password, first input your current password: ");
 		
@@ -114,14 +133,12 @@ public class Graenseflade {
 		
 		if(currPassword.equals(loggedInUser.password)) 
 		{
-			System.out.println("Current password matched, type in your new password:");
-			newPassword = input.nextLine();
-			System.out.println("Type the new password again to confirm the change:");
-			newPassword2 = input.nextLine();
-			loggedInUser.password = newPassword;
-			System.out.println("Password has been changed. Returning to rootmenu!");
-			System.out.println(loggedInUser + " | Med følgende password: " + loggedInUser.password);
-			state = State.ROOT_MENU;
+			try {
+				operatoerInterface.updateOperatoer(loggedInUser);
+			} catch (DALException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else 
 		{
 			System.out.println("Existing password not matched. Returning to root menu!");
@@ -176,13 +193,15 @@ public class Graenseflade {
 		System.out.println("2. Skift password");
 		System.out.println("3. Afvejning");
 		System.out.println("4. Afslut");
+		if (loggedInUser.isAdmin)System.out.println("5. (ADMIN) Slet bruger");
 		
 		int actionChoice = input.nextInt();
 		
 		if(actionChoice == 1) state = State.CREATE_USER; 
 		if(actionChoice == 2) state = State.CHANGE_PASSWORD; 
 		if(actionChoice == 3) state = State.WEIGH; 
-		if(actionChoice == 4) state = State.EXIT; 
+		if(actionChoice == 4) state = State.EXIT;
+		if (loggedInUser.isAdmin && actionChoice == 5) state = State.DELETE_OPERATOR;
 		
 		input.nextLine();
 		
