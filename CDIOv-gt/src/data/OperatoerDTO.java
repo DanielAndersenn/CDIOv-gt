@@ -59,7 +59,7 @@ public class OperatoerDTO implements IOperatoerDAO{
 
 	@Override
 	public void deleteOperatoer(OperatoerDTO opr) throws DALException {
-		// TODO Auto-generated method stub
+		operatoerList.remove(opr);
 		
 	}
 	
