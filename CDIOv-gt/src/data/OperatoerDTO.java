@@ -63,10 +63,11 @@ public class OperatoerDTO implements IOperatoerDAO{
 		
 		System.out.println("Type in your new password:");
 		newPassword = input.nextLine();
-		// Validate password
+		
 		System.out.println("Type the new password again to confirm the change:");
 		newPassword2 = input.nextLine();
 		if (newPassword.equals(newPassword2)){
+			validPassword(opr, newPassword);
 			opr.password = newPassword;			
 			System.out.println("Password has been changed. Returning to rootmenu!");
 			System.out.println(opr + " | Med følgende password: " + opr.password);
@@ -91,40 +92,40 @@ public class OperatoerDTO implements IOperatoerDAO{
 		return "Operatør ID: " + oprId + " | Navn: " + oprNavn + " | CPR-Nummer: " + cpr + " | Adminstrator: " + isAdmin;
 	}
 	
-	public boolean validPassword(OperatoerDTO opr){
+	public boolean validPassword(OperatoerDTO opr, String password) throws DALException {
 		boolean status = true;
 		int tq = 0;
 		
 		//Check if names is part of password
 		String[] splited = opr.oprNavn.split("\\s+");
-		if(opr.password.toLowerCase().contains(splited[0].toLowerCase())) status = false;
-		if(opr.password.toLowerCase().contains(splited[1].toLowerCase())) status = false;
+		if(password.toLowerCase().contains(splited[0].toLowerCase())) throw new DALException("Your password contains your name");
+		if(password.toLowerCase().contains(splited[1].toLowerCase())) throw new DALException("Your password contains your name");
 		
 		//Check password length
-		if(opr.password.length()<7) status = false;
+		if(password.length()<7) throw new DALException("Your password is too short");
 		
 		//Check for User ID
-		if(opr.password.contains(Integer.toString(opr.oprId))) status = false;
+		if(password.contains(Integer.toString(opr.oprId))) throw new DALException("Your password contains your ID");
 		
 		//The 4 categories
 		boolean[] req = new boolean[4];
 		Arrays.fill(req, Boolean.FALSE);
 
 			//Check for small letter
-			for(int i = 0; i < opr.password.length() ; i++) {
-				char test = opr.password.charAt(i);
+			for(int i = 0; i < password.length() ; i++) {
+				char test = password.charAt(i);
 				if(Character.isLowerCase(test))req[0] = true;
 			}
 			
 			//Check for capital letter
-			for(int i = 0; i < opr.password.length() ; i++) {
-				char test = opr.password.charAt(i);
+			for(int i = 0; i < password.length() ; i++) {
+				char test = password.charAt(i);
 				if(Character.isUpperCase(test))req[1] = true;
 			}
 			
 			//Check for Number
-			for(int i = 0; i < opr.password.length() ; i++) {
-				char test = opr.password.charAt(i);
+			for(int i = 0; i < password.length() ; i++) {
+				char test = password.charAt(i);
 				int number = Character.getNumericValue(test);
 				if(number >= 0 && number < 10)req[2] = true;
 			}
@@ -132,13 +133,13 @@ public class OperatoerDTO implements IOperatoerDAO{
 			//Check for Nonalphanumeric characters
 			String tegn[] = {".","-","_","+","!","?","="};
 			for(int i=0; i < tegn.length ; i++ ){
-				if(opr.password.contains(tegn[i]))req[3] = true;
+				if(password.contains(tegn[i]))req[3] = true;
 			}
 		
 		for(int i=0;i<4;i++){
 			if(req[i])tq++;
 		}
-		if(tq<3)status = false;
+		if(tq<3)throw new DALException("Your password does not forfill 3 of the 4 the requirements");
 		
 		return status;
 	}
