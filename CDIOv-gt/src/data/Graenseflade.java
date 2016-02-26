@@ -104,7 +104,7 @@ public class Graenseflade {
 		// Controls and verify the password
 		while (true) {
 		
-			System.out.println("Indtast password:");
+			System.out.println("Type in your password:");
 			password = input.nextLine();
 	
 			if(password.equals(loggedInUser.password)) {
