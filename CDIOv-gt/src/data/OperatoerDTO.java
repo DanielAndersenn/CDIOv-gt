@@ -85,7 +85,8 @@ public class OperatoerDTO implements IOperatoerDAO{
 			boolean a;
 			do{
 				a = validPassword(opr, newPassword);
-			}while(!a);
+			}
+			while(!a);
 			opr.password = newPassword;			
 			System.out.println("Password has been changed. Returning to rootmenu!");
 			System.out.println(opr + " | Med f�lgende password: " + opr.password);
