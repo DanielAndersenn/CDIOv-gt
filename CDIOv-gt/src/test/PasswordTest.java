@@ -5,69 +5,58 @@ import data.OperatoerDTO;
 
 public class PasswordTest {
 
-	static OperatoerDTO test = new OperatoerDTO();
+	//static OperatoerDTO test = new OperatoerDTO();
 	
 	public PasswordTest() {
 	}
 
 	public static void main(String[] args) {
+		boolean test1 = false;
+		boolean test2 = false;
+		boolean test3 = false;
+		boolean test4 = true;
 		
-		//Name in Pass
-		OperatoerDTO opr0 = new OperatoerDTO("Test Testersen", "000000-0000", "Test123-", true); //Password: Fejl
+		OperatoerDTO test = new OperatoerDTO("Test Testersen", "123456-0987", "Abc02324", true); //Korrekt bruger
 		
-		//Pass length
-		OperatoerDTO opr1 = new OperatoerDTO("Test Testersen", "000000-0000", "Ab1-", true); //Password: Fejl
 		
-		//ID in Pass
-		OperatoerDTO opr2 = new OperatoerDTO("Test Testersen", "000000-0000", "Hejven123-", true); //Password: Fejl
+		//Første test som skal fejle.	
+		try {
+			test.validPassword(test, "Test123-");	// Navn i bruger
+		} catch (DALException e) {
+			test1 = true;
+		} 	
 		
-		//No small letters
-		OperatoerDTO opr3 = new OperatoerDTO("Test Testersen", "000000-0000", "ABC-123", true); //Password: OK
+		//Anden test som skal fejle.
+		try {
+			test.validPassword(test, "Ab1-"); 		// Pass for kort
+		} catch (DALException e) {
+			test2 = true;
+		} 
 		
-		//No capital letters
-		OperatoerDTO opr4 = new OperatoerDTO("Test Testersen", "000000-0000", "abc-123", true); //Password: OK
+		//Tredje test som skal fejle.
+		try {
+			test.validPassword(test, "Hejven10-");		// ID i pass
+		} catch (DALException e) {
+			test3 = true;
+		} 
 		
-		//No numbers
-		OperatoerDTO opr5 = new OperatoerDTO("Test Testersen", "000000-0000", "Abcasdasd-", true); //Password: OK
-		
-		//No nonalphanumerical
-		OperatoerDTO opr6 = new OperatoerDTO("Test Testersen", "000000-0000", "Abcdasdasd123", true); //Password: OK
-		
+		//Denne burde IKKE fejle.
 		try{
-			test.validPassword(opr0);
-		} catch(DALException e) {
-			System.out.println(e.getMessage());
+		test.validPassword(test, "ABC-123");		// Ingen små bogstaver
+		test.validPassword(test, "abc-123");		// Ingen store bogstaver
+		test.validPassword(test, "Abcasdasd-");		// Ingen tal
+		test.validPassword(test, "Abcdasdasd123"); 	// Ingen tegn
+		} catch(DALException e){
+			System.out.println(e.getMeddelelse());
+			test4 = false;
 		}
-		try{
-			test.validPassword(opr1);
-		} catch(DALException e) {
-			System.out.println(e.getMessage());
+		
+		if(test1 && test2 && test3 && test4){
+			System.out.println("Test succeded");
+		} else {
+			System.out.println("Test failed");
 		}
-		try{
-			test.validPassword(opr2);
-		} catch(DALException e) {
-			System.out.println(e.getMessage());
-		}
-		try{
-			test.validPassword(opr3);
-		} catch(DALException e) {
-			System.out.println(e.getMessage());
-		}
-		try{
-			test.validPassword(opr4);
-		} catch(DALException e) {
-			System.out.println(e.getMessage());
-		}
-		try{
-			test.validPassword(opr5);
-		} catch(DALException e) {
-			System.out.println(e.getMessage());
-		}
-		try{
-			test.validPassword(opr6);
-		} catch(DALException e) {
-			System.out.println(e.getMessage());
-		}
+		
 	}
 
 }
