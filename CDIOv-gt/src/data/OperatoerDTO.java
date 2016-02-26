@@ -3,9 +3,7 @@ package data;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.InputMismatchException;
-import java.util.Scanner;
-
-import data.Graenseflade.State;	
+import java.util.Scanner;	
 
 public class OperatoerDTO implements IOperatoerDAO{
 	
@@ -19,10 +17,12 @@ public class OperatoerDTO implements IOperatoerDAO{
 	
 	private ArrayList<OperatoerDTO> operatoerList = new ArrayList<OperatoerDTO>();
 	
+	// Constructor 1
 	public OperatoerDTO() {
 		
 	}
 	
+	// Constructor 2
 	public OperatoerDTO(String oprNavn, String cpr, String password, boolean isAdmin) {
 		this.oprId = oprIdCounter;
 		this.oprNavn = oprNavn;
@@ -47,10 +47,10 @@ public class OperatoerDTO implements IOperatoerDAO{
 			}
 		}
 		catch (IndexOutOfBoundsException e){
-			throw new DALException("Operatoer findes ikke");
+			throw new DALException("Operator does not exist");
 		}
 		catch (InputMismatchException ei) {
-			throw new DALException("Giv venligst et korrekt input");
+			throw new DALException("Please give a correct type of input");
 		}
 	}
 
@@ -89,7 +89,7 @@ public class OperatoerDTO implements IOperatoerDAO{
 			while(!a);
 			opr.password = newPassword;			
 			System.out.println("Password has been changed. Returning to rootmenu!");
-			System.out.println(opr + " | Med f�lgende password: " + opr.password);
+			System.out.println(opr + " | with the following: " + opr.password);
 		}
 		else {
 			System.out.println("Password is not identical. Try again.");
@@ -110,7 +110,7 @@ public class OperatoerDTO implements IOperatoerDAO{
 	}
 	
 	public String toString() {
-		return "Operat�r ID: " + oprId + " | Navn: " + oprNavn + " | CPR-Nummer: " + cpr + " | Adminstrator: " + isAdmin;
+		return "Operator ID: " + oprId + " | Name: " + oprNavn + " | CPR-No.: " + cpr + " | Administrator: " + isAdmin;
 	}
 	
 	public boolean validPassword(OperatoerDTO opr, String password) throws DALException {
