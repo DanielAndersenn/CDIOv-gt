@@ -41,29 +41,35 @@ public class Graenseflade {
 	}
 	
 	private void deleteOperator() throws DALException {
-		// TODO Auto-generated method stub
-		int oprId;
-		OperatoerDTO userToDelete;
-		ArrayList<OperatoerDTO> allOperators = operatoerInterface.getOperatoerList();
-		System.out.println("All operators in the system");
-		for(int i = 0; i < allOperators.size(); i++){
-			System.out.println(allOperators.get(i));
-		}
-		System.out.println("Choose ID of operator that you would like to delete:");
-		oprId = input.nextInt();
-		userToDelete = operatoerInterface.getOperatoer(oprId);
-		operatoerInterface.deleteOperatoer(userToDelete);
 		
-		state = State.ROOT_MENU;
+		int oprId;
+		
+		try {
+			OperatoerDTO userToDelete;
+			ArrayList<OperatoerDTO> allOperators = operatoerInterface.getOperatoerList();
+			System.out.println("All operators in the system");
+			for(int i = 0; i < allOperators.size(); i++){
+				System.out.println(allOperators.get(i));
+			}
+			System.out.println("Choose ID of operator that you would like to delete:");
+			oprId = input.nextInt();
+			userToDelete = operatoerInterface.getOperatoer(oprId);
+			operatoerInterface.deleteOperatoer(userToDelete);
+		
+			state = State.ROOT_MENU;
+			}
+		catch (DALException e){
+			System.out.println(e.getMeddelelse()):
+		}
 	}
 
-	private void logIn() {
+	private void logIn() { // Formentlig fejl her
 		
 		int operatoerID; 
 		String password;
 		
 		System.out.println("Velkommen til applikation v1.0");
-		System.out.println("Indtast dit administrator operatør ID:");
+		System.out.println("Indtast dit administrator operatï¿½r ID:");
 		
 		operatoerID = input.nextInt();
 		input.nextLine();
@@ -72,8 +78,7 @@ public class Graenseflade {
 			loggedInUser = operatoerInterface.getOperatoer(operatoerID);
 			System.out.println(loggedInUser);
 		} catch (DALException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMeddelelse());
 		}
 		
 		System.out.println("Indtast password:");
@@ -131,16 +136,10 @@ public class Graenseflade {
 		
 		currPassword = input.nextLine();
 		
-		if(currPassword.equals(loggedInUser.password)) 
-		{
-			try {
+		if(currPassword.equals(loggedInUser.password)) {
 				operatoerInterface.updateOperatoer(loggedInUser);
-			} catch (DALException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else 
-		{
+		} 
+		else {
 			System.out.println("Existing password not matched. Returning to root menu!");
 			state = State.ROOT_MENU;
 		}
@@ -155,7 +154,7 @@ public class Graenseflade {
 		
 		OperatoerDTO newUser;
 		
-		System.out.println("Du har valgt at oprette en ny bruger! Indtast først navnet på brugeren:");
+		System.out.println("Du har valgt at oprette en ny bruger! Indtast fï¿½rst navnet pï¿½ brugeren:");
 		
 		navn = input.nextLine();
 		
@@ -167,7 +166,7 @@ public class Graenseflade {
 		
 		password = input.nextLine();
 		
-		System.out.println("Skal brugeren være adminstrator? Input Y for ja eller N for nej:");
+		System.out.println("Skal brugeren vï¿½re adminstrator? Input Y for ja eller N for nej:");
 		
 		isAdmin = (input.nextLine().equals("Y")) ? true : false;
 		
@@ -180,7 +179,7 @@ public class Graenseflade {
 			e.printStackTrace();
 		}
 		
-		System.out.println("Følgende bruger er blevet oprettet:");
+		System.out.println("Fï¿½lgende bruger er blevet oprettet:");
 		System.out.println(newUser);
 		
 		state = State.ROOT_MENU;
@@ -188,7 +187,7 @@ public class Graenseflade {
 	}
 
 	private void rootMenu() {
-		System.out.println("Indtast nummeret på den handling du ønsker at udføre!");
+		System.out.println("Indtast nummeret pï¿½ den handling du ï¿½nsker at udfï¿½re!");
 		System.out.println("1. Opret ny bruger");
 		System.out.println("2. Skift password");
 		System.out.println("3. Afvejning");
@@ -206,6 +205,4 @@ public class Graenseflade {
 		input.nextLine();
 		
 	}
-	
-	
 }

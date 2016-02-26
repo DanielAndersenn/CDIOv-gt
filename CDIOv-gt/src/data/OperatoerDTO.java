@@ -34,14 +34,17 @@ public class OperatoerDTO implements IOperatoerDAO{
 	@Override
 	public OperatoerDTO getOperatoer(int oprId) throws DALException {
 		
-		OperatoerDTO toReturn = null;
+		int i = 0;
 		
-		for(int i = 0; i < operatoerList.size(); i++)
-		{
-			if(operatoerList.get(i).oprId == oprId) toReturn = operatoerList.get(i);
+		try {
+			while (true) {
+				if (personer.get(i++).cpr.equals(cpr))
+					return personer.get(i).hoejde;
+			}
 		}
-		
-		return toReturn;
+		catch (IndexOutOfBoundsException e){
+			throw new DALException("CPR findes ikke");
+		}
 	}
 
 	@Override
@@ -66,13 +69,15 @@ public class OperatoerDTO implements IOperatoerDAO{
 		
 		System.out.println("Type the new password again to confirm the change:");
 		newPassword2 = input.nextLine();
+		
 		if (newPassword.equals(newPassword2)){
 			validPassword(opr, newPassword);
 			opr.password = newPassword;			
 			System.out.println("Password has been changed. Returning to rootmenu!");
-			System.out.println(opr + " | Med følgende password: " + opr.password);
+			System.out.println(opr + " | Med fï¿½lgende password: " + opr.password);
 			input.close();
-		} else {
+		}
+		else {
 			System.out.println("Password is not identical. Try again.");
 			input.close();
 			updateOperatoer(opr);
@@ -81,15 +86,18 @@ public class OperatoerDTO implements IOperatoerDAO{
 
 	@Override
 	public void deleteOperatoer(OperatoerDTO opr) throws DALException {
-		if (!operatoerList.remove(opr)) {
-			throw new DALException("Operator does not exist");
-		} else {
-			System.out.println("Deletion of user was successful.");
+		
+		try {
+			operatoerList.remove(opr)
+			System.out.println("Deletion of user was succesful");
+		}
+		catch (NullPointerException e){
+			throw new DALException("Operatoer does not exist");
 		}
 	}
 	
 	public String toString() {
-		return "Operatør ID: " + oprId + " | Navn: " + oprNavn + " | CPR-Nummer: " + cpr + " | Adminstrator: " + isAdmin;
+		return "Operatï¿½r ID: " + oprId + " | Navn: " + oprNavn + " | CPR-Nummer: " + cpr + " | Adminstrator: " + isAdmin;
 	}
 	
 	public boolean validPassword(OperatoerDTO opr, String password) throws DALException {
