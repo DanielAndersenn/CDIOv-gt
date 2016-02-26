@@ -82,15 +82,16 @@ public class OperatoerDTO implements IOperatoerDAO{
 		newPassword2 = input.nextLine();
 		
 		if (newPassword.equals(newPassword2)){
-			validPassword(opr, newPassword);
+			boolean a;
+			do{
+				a = validPassword(opr, newPassword);
+			}while(!a);
 			opr.password = newPassword;			
 			System.out.println("Password has been changed. Returning to rootmenu!");
 			System.out.println(opr + " | Med f�lgende password: " + opr.password);
-			input.close();
 		}
 		else {
 			System.out.println("Password is not identical. Try again.");
-			input.close();
 			updateOperatoer(opr);
 		}
 	}
@@ -117,8 +118,9 @@ public class OperatoerDTO implements IOperatoerDAO{
 		
 		//Check if names is part of password
 		String[] splited = opr.oprNavn.split("\\s+");
-		if(password.toLowerCase().contains(splited[0].toLowerCase())) throw new DALException("Your password contains your name");
-		if(password.toLowerCase().contains(splited[1].toLowerCase())) throw new DALException("Your password contains your name");
+		for(int i = 0; i < splited.length; i++){
+			if(password.toLowerCase().contains(splited[i].toLowerCase())) throw new DALException("Your password contains your name");
+		}
 		
 		//Check password length
 		if(password.length()<7) throw new DALException("Your password is too short");

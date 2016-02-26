@@ -18,6 +18,6 @@ public class Main {
 		
 		Graenseflade g = new Graenseflade(d);		
 		g.run();
-
+		//test - fjern dette
 	}
 }
