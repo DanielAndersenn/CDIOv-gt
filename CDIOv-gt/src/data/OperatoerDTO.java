@@ -21,6 +21,7 @@ public class OperatoerDTO implements IOperatoerDAO{
 	public OperatoerDTO() {
 		
 	}
+
 	
 	// Constructor 2
 	public OperatoerDTO(String oprNavn, String cpr, String password, boolean isAdmin) {
