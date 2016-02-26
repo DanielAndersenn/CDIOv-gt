@@ -149,6 +149,7 @@ public class Graenseflade {
 		try {
 			if(currPassword.equals(loggedInUser.password)) {
 				operatoerInterface.updateOperatoer(loggedInUser);
+				state = State.ROOT_MENU;
 			} 
 			else {
 				System.out.println("Existing password not matched. Returning to root menu!");
