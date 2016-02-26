@@ -1,5 +1,6 @@
 package data;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
@@ -59,35 +60,45 @@ public class Graenseflade {
 			state = State.ROOT_MENU;
 			}
 		catch (DALException e){
-			System.out.println(e.getMeddelelse()):
+			System.out.println(e.getMeddelelse());
 		}
 	}
 
-	private void logIn() { // Formentlig fejl her
+	private void logIn() throws DALException { // Formentlig fejl her
 		
-		int operatoerID; 
-		String password;
+		int operatoerID = 0; 
+		String password = "";
 		
 		System.out.println("Velkommen til applikation v1.0");
-		System.out.println("Indtast dit administrator operat�r ID:");
+			
+		while (true) {
+			try {
+				System.out.println("Indtast dit administrator operat�r ID:");
+				operatoerID = input.nextInt();
+				input.nextLine();
+				break;
+			}
+			catch (InputMismatchException ie){
+				System.out.println("Please give a correct input");
+			}
+	}
 		
-		operatoerID = input.nextInt();
-		input.nextLine();
+		loggedInUser = operatoerInterface.getOperatoer(operatoerID);
+		System.out.println(loggedInUser);
+			
+		while (true) {
 		
-		try {
-			loggedInUser = operatoerInterface.getOperatoer(operatoerID);
-			System.out.println(loggedInUser);
-		} catch (DALException e) {
-			System.out.println(e.getMeddelelse());
+			System.out.println("Indtast password:");
+			password = input.nextLine();
+	
+			if(password.equals(loggedInUser.password)) {
+				break;
+			}
+			else {
+				System.out.println("Forkert password");
+			}
 		}
-		
-		System.out.println("Indtast password:");
-		
-		password = input.nextLine();
-		
-		if(password.equals(loggedInUser.password)) state = State.ROOT_MENU;
-		
-		
+		state = State.ROOT_MENU;
 	}
 
 	private void exit() {
@@ -127,7 +138,7 @@ public class Graenseflade {
 		}
 	}
 
-	private void changePassword() {
+	private void changePassword() throws DALException {
 		
 		String currPassword;
 	
@@ -135,13 +146,17 @@ public class Graenseflade {
 		System.out.println("To change your password, first input your current password: ");
 		
 		currPassword = input.nextLine();
-		
-		if(currPassword.equals(loggedInUser.password)) {
+		try {
+			if(currPassword.equals(loggedInUser.password)) {
 				operatoerInterface.updateOperatoer(loggedInUser);
-		} 
-		else {
-			System.out.println("Existing password not matched. Returning to root menu!");
-			state = State.ROOT_MENU;
+			} 
+			else {
+				System.out.println("Existing password not matched. Returning to root menu!");
+				state = State.ROOT_MENU;
+			}
+		}
+		catch (DALException e) {
+			System.out.println(e.getMeddelelse());
 		}
 		
 	}

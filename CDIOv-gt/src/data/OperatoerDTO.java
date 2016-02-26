@@ -2,6 +2,7 @@ package data;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import data.Graenseflade.State;	
@@ -38,12 +39,19 @@ public class OperatoerDTO implements IOperatoerDAO{
 		
 		try {
 			while (true) {
-				if (personer.get(i++).cpr.equals(cpr))
-					return personer.get(i).hoejde;
+				
+				if (operatoerList.get(i).oprId == oprId) {
+					return operatoerList.get(i);
+				}
+				
+				i++;
 			}
 		}
 		catch (IndexOutOfBoundsException e){
-			throw new DALException("CPR findes ikke");
+			throw new DALException("Operatoer findes ikke");
+		}
+		catch (InputMismatchException ei) {
+			throw new DALException("Giv venligst et korrekt input");
 		}
 	}
 
@@ -88,7 +96,7 @@ public class OperatoerDTO implements IOperatoerDAO{
 	public void deleteOperatoer(OperatoerDTO opr) throws DALException {
 		
 		try {
-			operatoerList.remove(opr)
+			operatoerList.remove(opr);
 			System.out.println("Deletion of user was succesful");
 		}
 		catch (NullPointerException e){
