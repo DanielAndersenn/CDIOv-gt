@@ -22,7 +22,6 @@ public class OperatoerDTO implements IOperatoerDAO{
 	public OperatoerDTO() {
 		
 	}
-	
 	public OperatoerDTO(String oprNavn, String cpr, String password, boolean isAdmin) {
 		this.oprId = oprIdCounter;
 		this.oprNavn = oprNavn;

@@ -9,7 +9,6 @@ public class Graenseflade {
 	private IOperatoerDAO operatoerInterface;
 	private OperatoerDTO loggedInUser;
 	Scanner input = new Scanner(System.in);	
-	
 	//States: 	
 	public enum State {LOG_IN, ROOT_MENU, CREATE_USER, CHANGE_PASSWORD , WEIGH, EXIT, DELETE_OPERATOR};
 	private State state = State.LOG_IN;
@@ -65,7 +64,6 @@ public class Graenseflade {
 	}
 
 	private void logIn() throws DALException {
-		
 		int operatoerID = 0; 
 		String password = "";
 		
