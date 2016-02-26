@@ -43,7 +43,6 @@ public class OperatoerDTO implements IOperatoerDAO{
 				if (operatoerList.get(i).oprId == oprId) {
 					return operatoerList.get(i);
 				}
-				
 				i++;
 			}
 		}
@@ -63,7 +62,11 @@ public class OperatoerDTO implements IOperatoerDAO{
 
 	@Override
 	public void createOperatoer(OperatoerDTO opr) throws DALException {
-		operatoerList.add(opr);
+		boolean a = false;
+		a = validPassword(opr,opr.password);
+		if(a){
+			operatoerList.add(opr);
+		}
 	}
 
 	@Override
@@ -109,7 +112,7 @@ public class OperatoerDTO implements IOperatoerDAO{
 	}
 	
 	public boolean validPassword(OperatoerDTO opr, String password) throws DALException {
-		boolean status = true;
+		boolean status = false;
 		int tq = 0;
 		
 		//Check if names is part of password
@@ -155,7 +158,11 @@ public class OperatoerDTO implements IOperatoerDAO{
 		for(int i=0;i<4;i++){
 			if(req[i])tq++;
 		}
-		if(tq<3)throw new DALException("Your password does not forfill 3 of the 4 the requirements");
+		if(tq<3){
+			throw new DALException("Your password does not forfill 3 of the 4 the requirements");
+		}else{
+			status=true;
+		}
 		
 		return status;
 	}

@@ -64,7 +64,7 @@ public class Graenseflade {
 		}
 	}
 
-	private void logIn() throws DALException { // Formentlig fejl her
+	private void logIn() throws DALException {
 		
 		int operatoerID = 0; 
 		String password = "";
@@ -76,16 +76,19 @@ public class Graenseflade {
 				System.out.println("Indtast dit administrator operat�r ID:");
 				operatoerID = input.nextInt();
 				input.nextLine();
+				loggedInUser = operatoerInterface.getOperatoer(operatoerID);
+				System.out.println(loggedInUser);
 				break;
 			}
-			catch (InputMismatchException ie){
-				System.out.println("Please give a correct input");
+			catch (DALException ie) {
+				System.out.println(ie.getMeddelelse());
+			}
+			catch (InputMismatchException ee) {
+				System.out.print("Please give a correct input\n");
+				input.next();
 			}
 	}
 		
-		loggedInUser = operatoerInterface.getOperatoer(operatoerID);
-		System.out.println(loggedInUser);
-			
 		while (true) {
 		
 			System.out.println("Indtast password:");
@@ -161,7 +164,7 @@ public class Graenseflade {
 		
 	}
 
-	private void createUser() {
+	private void createUser() throws DALException {
 		String navn;
 		String cpr;
 		String password;
@@ -169,36 +172,40 @@ public class Graenseflade {
 		
 		OperatoerDTO newUser;
 		
-		System.out.println("Du har valgt at oprette en ny bruger! Indtast f�rst navnet p� brugeren:");
 		
-		navn = input.nextLine();
 		
-		System.out.println("Indtast cpr-nummer:");
+			System.out.println("Du har valgt at oprette en ny bruger! Indtast f�rst navnet p� brugeren:");
 		
-		cpr = input.nextLine();
+			navn = input.nextLine();
 		
-		System.out.println("Indtast password:");
+			System.out.println("Indtast cpr-nummer:");
 		
-		password = input.nextLine();
+			cpr = input.nextLine();
 		
-		System.out.println("Skal brugeren v�re adminstrator? Input Y for ja eller N for nej:");
+			System.out.println("Indtast password:");
 		
-		isAdmin = (input.nextLine().equals("Y")) ? true : false;
+			password = input.nextLine();
 		
-		newUser = new OperatoerDTO(navn, cpr, password, isAdmin);
+			System.out.println("Skal brugeren v�re adminstrator? Input Y for ja eller N for nej:");
+			
+			isAdmin = (input.nextLine().equals("Y")) ? true : false;
 		
-		try {
-			operatoerInterface.createOperatoer(newUser);
-		} catch (DALException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			newUser = new OperatoerDTO(navn, cpr, password, isAdmin);
+			while(true){
+			try{
+				operatoerInterface.createOperatoer(newUser);
+				break;
+			}catch(DALException e){
+				System.out.println(e.getMeddelelse());
+				System.out.println("Try again:");
+				newUser.password = input.nextLine();
+			}
+			}
+			System.out.println("F�lgende bruger er blevet oprettet:");
+			System.out.println(newUser);
 		
-		System.out.println("F�lgende bruger er blevet oprettet:");
-		System.out.println(newUser);
 		
 		state = State.ROOT_MENU;
-		
 	}
 
 	private void rootMenu() {
